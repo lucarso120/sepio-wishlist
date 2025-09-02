@@ -257,8 +257,7 @@
         </div>
         
         <div class="header">
-            <h1 class="title">🍎 Sepio Groceries Wishlist 🥕</h1>
-            <p class="subtitle">What would you like in our kitchen?</p>
+            <h1 class="title">🍫 Sepio Groceries Wishlist 🥕</h1>
         </div>
 
         <div class="input-section">
@@ -266,7 +265,7 @@
                 type="text" 
                 id="itemInput" 
                 class="item-input" 
-                placeholder="Sergiooo, please buy..."
+                placeholder="Please buy..."
                 maxlength="50"
             >
             <div id="limitWarning" class="limit-warning" style="display: none;">
@@ -290,7 +289,6 @@
         const wishlistBoard = document.getElementById('wishlistBoard');
         const itemCount = document.getElementById('itemCount');
         const clearBtn = document.getElementById('clearBtn');
-        const emptyMessage = document.getElementById('emptyMessage');
         const limitWarning = document.getElementById('limitWarning');
 
         function updateItemCounter() {
@@ -308,7 +306,10 @@
             wishlistBoard.innerHTML = '';
             
             if (wishlistItems.length === 0) {
-                wishlistBoard.appendChild(emptyMessage);
+                const emptyMsg = document.createElement('div');
+                emptyMsg.className = 'empty-message';
+                wishlistBoard.appendChild(emptyMsg);
+                updateItemCounter();
                 return;
             }
 
