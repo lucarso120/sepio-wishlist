@@ -1,0 +1,13 @@
+{
+  "name": "sepio-wishlist",
+  "version": "1.0.0",
+  "description": "A grocery wishlist app with kids drawing pad aesthetic",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static files ready for deployment'",
+    "start": "npx serve ."
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

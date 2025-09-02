@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sepio Kitchen Wishlist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kalam', cursive;
+            background: linear-gradient(135deg, #87CEEB 0%, #98D8E8 100%);
+            min-height: 100vh;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 3px, transparent 3px),
+                radial-gradient(circle at 80% 50%, rgba(120, 119, 198, 0.1) 3px, transparent 3px);
+            background-size: 100px 100px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #FFFACD;
+            border-radius: 20px;
+            box-shadow: 
+                0 0 0 8px #8B4513,
+                0 0 0 12px #A0522D,
+                0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            position: relative;
+            background-image: 
+                linear-gradient(90deg, #E6E6FA 1px, transparent 1px),
+                linear-gradient(#E6E6FA 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: #FF6B6B;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+            transform: rotate(-2deg);
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #4ECDC4;
+            transform: rotate(1deg);
+            display: inline-block;
+        }
+
+        .board {
+            min-height: 400px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .card {
+            background: #FFE4B5;
+            border: 3px solid #DEB887;
+            border-radius: 15px;
+            padding: 15px;
+            position: relative;
+            transform: rotate(var(--rotation, 0deg));
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            word-wrap: break-word;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #8B4513;
+        }
+
+        .card:nth-child(odd) {
+            --rotation: -2deg;
+            background: #FFB6C1;
+            border-color: #DB7093;
+        }
+
+        .card:nth-child(even) {
+            --rotation: 2deg;
+        }
+
+        .card:nth-child(3n) {
+            --rotation: -1deg;
+            background: #98FB98;
+            border-color: #90EE90;
+        }
+
+        .card:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #FF4757;
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            background: #FF3838;
+            transform: scale(1.1);
+        }
+
+        .input-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .item-input {
+            width: 300px;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            border: 3px solid #4ECDC4;
+            border-radius: 25px;
+            outline: none;
+            font-family: 'Kalam', cursive;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .item-input:focus {
+            border-color: #FF6B6B;
+            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
+            transform: scale(1.02);
+        }
+
+        .item-input::placeholder {
+            color: #999;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .clear-btn {
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Kalam', cursive;
+            font-weight: 700;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+            transform: rotate(-1deg);
+        }
+
+        .clear-btn:hover {
+            background: #FF5252;
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .item-counter {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: #4ECDC4;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            transform: rotate(3deg);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            font-size: 1.3rem;
+            font-style: italic;
+            grid-column: 1 / -1;
+            margin: 50px 0;
+            transform: rotate(-1deg);
+        }
+
+        .limit-warning {
+            background: #FFE4E1;
+            border: 2px solid #FF6B6B;
+            color: #D63031;
+            padding: 10px 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+            transform: rotate(-1deg);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .item-input {
+                width: 250px;
+            }
+            
+            .board {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="item-counter">
+            <span id="itemCount">0</span>/20 items
+        </div>
+        
+        <div class="header">
+            <h1 class="title">🍎 Kitchen Wishlist 🥕</h1>
+            <p class="subtitle">What would you like in our kitchen?</p>
+        </div>
+
+        <div class="input-section">
+            <input 
+                type="text" 
+                id="itemInput" 
+                class="item-input" 
+                placeholder="Type your wishlist item here..."
+                maxlength="50"
+            >
+            <div id="limitWarning" class="limit-warning" style="display: none;">
+                Maximum 20 items reached! Please remove some items before adding more.
+            </div>
+        </div>
+
+        <div class="board" id="wishlistBoard">
+            <div class="empty-message" id="emptyMessage">
+                🌟 Start adding your wishlist items! 🌟
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="clear-btn" id="clearBtn">🗑️ Clear All Items</button>
+        </div>
+    </div>
+
+    <script>
+        let wishlistItems = [];
+        const MAX_ITEMS = 20;
+
+        const itemInput = document.getElementById('itemInput');
+        const wishlistBoard = document.getElementById('wishlistBoard');
+        const itemCount = document.getElementById('itemCount');
+        const clearBtn = document.getElementById('clearBtn');
+        const emptyMessage = document.getElementById('emptyMessage');
+        const limitWarning = document.getElementById('limitWarning');
+
+        function updateItemCounter() {
+            itemCount.textContent = wishlistItems.length;
+        }
+
+        function showLimitWarning() {
+            limitWarning.style.display = 'block';
+            setTimeout(() => {
+                limitWarning.style.display = 'none';
+            }, 3000);
+        }
+
+        function renderItems() {
+            wishlistBoard.innerHTML = '';
+            
+            if (wishlistItems.length === 0) {
+                wishlistBoard.appendChild(emptyMessage);
+                return;
+            }
+
+            wishlistItems.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.textContent = item;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.innerHTML = '×';
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    removeItem(index);
+                };
+
+                card.appendChild(deleteBtn);
+                wishlistBoard.appendChild(card);
+            });
+
+            updateItemCounter();
+        }
+
+        function addItem(item) {
+            if (item.trim() === '') return;
+            
+            if (wishlistItems.length >= MAX_ITEMS) {
+                showLimitWarning();
+                return;
+            }
+
+            wishlistItems.push(item.trim());
+            renderItems();
+            itemInput.value = '';
+        }
+
+        function removeItem(index) {
+            wishlistItems.splice(index, 1);
+            renderItems();
+        }
+
+        function clearAll() {
+            if (wishlistItems.length === 0) return;
+            
+            if (confirm('Are you sure you want to clear all items?')) {
+                wishlistItems = [];
+                renderItems();
+            }
+        }
+
+        itemInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addItem(itemInput.value);
+            }
+        });
+
+        clearBtn.addEventListener('click', clearAll);
+
+        renderItems();
+    </script>
+</body>
+</html>
