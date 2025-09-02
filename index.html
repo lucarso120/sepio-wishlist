@@ -282,7 +282,7 @@
     </div>
 
     <script>
-        let wishlistItems = [];
+        let wishlistItems = JSON.parse(localStorage.getItem('sepioWishlist')) || [];
         const MAX_ITEMS = 20;
 
         const itemInput = document.getElementById('itemInput');
@@ -290,6 +290,10 @@
         const itemCount = document.getElementById('itemCount');
         const clearBtn = document.getElementById('clearBtn');
         const limitWarning = document.getElementById('limitWarning');
+
+        function saveToLocalStorage() {
+            localStorage.setItem('sepioWishlist', JSON.stringify(wishlistItems));
+        }
 
         function updateItemCounter() {
             itemCount.textContent = wishlistItems.length;
@@ -342,12 +346,14 @@
             }
 
             wishlistItems.push(item.trim());
+            saveToLocalStorage();
             renderItems();
             itemInput.value = '';
         }
 
         function removeItem(index) {
             wishlistItems.splice(index, 1);
+            saveToLocalStorage();
             renderItems();
         }
 
@@ -356,6 +362,7 @@
             
             if (confirm('Are you sure you want to clear all items?')) {
                 wishlistItems = [];
+                saveToLocalStorage();
                 renderItems();
             }
         }
