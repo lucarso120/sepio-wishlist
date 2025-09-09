@@ -282,7 +282,7 @@
     </div>
 
     <script>
-        let wishlistItems = JSON.parse(localStorage.getItem('sepioWishlist')) || [];
+        let wishlistItems = [];
         const MAX_ITEMS = 20;
 
         const itemInput = document.getElementById('itemInput');
@@ -291,8 +291,33 @@
         const clearBtn = document.getElementById('clearBtn');
         const limitWarning = document.getElementById('limitWarning');
 
-        function saveToLocalStorage() {
-            localStorage.setItem('sepioWishlist', JSON.stringify(wishlistItems));
+        async function saveToServer() {
+            try {
+                await fetch('/api/wishlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ items: wishlistItems })
+                });
+                localStorage.setItem('sepioWishlist', JSON.stringify(wishlistItems));
+            } catch (error) {
+                console.error('Failed to save to server, using localStorage:', error);
+                localStorage.setItem('sepioWishlist', JSON.stringify(wishlistItems));
+            }
+        }
+
+        async function loadFromServer() {
+            try {
+                const response = await fetch('/api/wishlist');
+                const data = await response.json();
+                wishlistItems = data.items || [];
+                renderItems();
+            } catch (error) {
+                console.error('Failed to load from server, using localStorage:', error);
+                wishlistItems = JSON.parse(localStorage.getItem('sepioWishlist')) || [];
+                renderItems();
+            }
         }
 
         function updateItemCounter() {
@@ -312,6 +337,7 @@
             if (wishlistItems.length === 0) {
                 const emptyMsg = document.createElement('div');
                 emptyMsg.className = 'empty-message';
+                emptyMsg.textContent = 'Your wishlist is empty. Add some items!';
                 wishlistBoard.appendChild(emptyMsg);
                 updateItemCounter();
                 return;
@@ -337,7 +363,7 @@
             updateItemCounter();
         }
 
-        function addItem(item) {
+        async function addItem(item) {
             if (item.trim() === '') return;
             
             if (wishlistItems.length >= MAX_ITEMS) {
@@ -346,24 +372,28 @@
             }
 
             wishlistItems.push(item.trim());
-            saveToLocalStorage();
+            await saveToServer();
             renderItems();
             itemInput.value = '';
         }
 
-        function removeItem(index) {
+        async function removeItem(index) {
             wishlistItems.splice(index, 1);
-            saveToLocalStorage();
+            await saveToServer();
             renderItems();
         }
 
-        function clearAll() {
+        async function clearAll() {
             if (wishlistItems.length === 0) return;
             
             if (confirm('Are you sure you want to clear all items?')) {
-                wishlistItems = [];
-                saveToLocalStorage();
-                renderItems();
+                try {
+                    await fetch('/api/wishlist', { method: 'DELETE' });
+                    wishlistItems = [];
+                    renderItems();
+                } catch (error) {
+                    console.error('Failed to clear wishlist:', error);
+                }
             }
         }
 
@@ -375,7 +405,7 @@
 
         clearBtn.addEventListener('click', clearAll);
 
-        renderItems();
+        loadFromServer();
     </script>
 </body>
 </html>
